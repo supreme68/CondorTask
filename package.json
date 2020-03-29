@@ -38,6 +38,8 @@
     "gulp-sourcemaps": "^2.6.4",
     "gulp-uglify": "^3.0.0",
     "gulp-uglifycss": "^1.1.0",
-    "gulp-v4": "^4.0.0-alpha.5"
+    "gulp-v4": "^4.0.0-alpha.5",
+    "gulp-flatten": "^0.4.0"
+
   }
 }

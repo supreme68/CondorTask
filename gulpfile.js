@@ -1,3 +1,4 @@
+//Imports
 const {series, src, dest} = require("gulp");
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync').create();
@@ -8,13 +9,31 @@ const rename = require('gulp-rename');
 const babel = require('gulp-babel');
 const concat = require('gulp-concat');
 const fs   = require('fs');
+const flatten = require('gulp-flatten')
 
 
-const jsInput = 'app/scripts/*.js';
+function minifyJsFile(jsInput){
+    src(jsInput)
+        .pipe(sourcemaps.init())
+        .pipe(babel({
+            presets:["env"]
+        }))
+        .pipe(rename(jsInput.replace(".js", ".min.js")))
+        .pipe(uglify())
+        .pipe(sourcemaps.write("."))
+        .pipe(flatten())
+        .pipe(dest("./bin"))
+}
 
+function createBin(sb){
+    if(!fs.existsSync("./bin")){
+        fs.mkdirSync("./bin");
+        console.log("📁 🗑️ bin folder created")    }
+    sb();
+}
 
 function sassBuild(){
-        return src('scss/style.scss')
+    return src('src/scss/style.scss')
             .pipe(sourcemaps.init())
             .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
             .pipe(autoprefixer())
@@ -25,18 +44,9 @@ function sassBuild(){
             }))
 }
 
-function minifyJS(){
-    return src('app/scripts/scripts.js')
-        .pipe(sourcemaps.init())
-        ,pipe(babe({
-            presets:["env"]
-        }))
-        .pipe(concat("scripts.js"))
-        .pipe(dest('app/scripts'))
-        .pipe(rename("scripts.min.js"))
-        .pipe(uglify())
-        .pipe(sourcemaps.write("."))
-        .pipe(dest())
+function minifyJS(sb){
+    minifyJsFile("src/scripts/scripts.js")
+    sb()
 }
 
-exports.build = series(sassBuild);
+exports.build = series(createBin ,sassBuild, minifyJS);

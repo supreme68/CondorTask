@@ -7,6 +7,9 @@
 		-game.html
 	-styles
 		-index.sass
+	-imgs
+		kek.png
+		kek2.png
 		
 -bin
 	index.min.js
