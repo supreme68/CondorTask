@@ -1,0 +1,23 @@
+-src
+	-scripts
+		-index.js
+		-game.js
+	-pages
+		-index.html
+		-game.html
+	-styles
+		-index.sass
+		
+-bin
+	index.min.js
+	game.min.js
+	index.min.html
+	game.min.html
+	index.min.css
+	
+gulp.js
+package.json
+README.md
+.babelrc
+.gitignore - contains ignore for bin
+.eskubtrc.json
