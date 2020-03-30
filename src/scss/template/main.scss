@@ -1,4 +1,25 @@
-main {
-	max-width: 650px;
-	margin: 80px auto 0 auto;
+.main-wrapper {
+	max-width: 1280px;
+	margin: 160px auto 0 auto;
+	background-color: rgb(6, 102, 102);
+}
+
+#text-wrapper{
+	max-width: 850px;
+	margin: 100px auto 0 auto;
+	background-color: rgb(30, 58, 58);
+	font-family: "Tahoma";
+	color: rgb(255, 255, 255);
+}
+
+.text{
+	font-size: 12px;
+	line-height: 1.5;
+	text-align: left;
+	position: raltive;
+	left: 100px;
+	top: 261.638px;
+	width: 738px;
+	height: 100px;
+	z-index: 15;
 }

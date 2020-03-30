@@ -1,3 +1,4 @@
+//TODO:After project is completed delete this file
 const scssInput = ['scss/style.scss'],
     scssOutput = 'app/css',
     vendorInput = [
