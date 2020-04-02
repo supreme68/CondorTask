@@ -1,5 +1,7 @@
+//TODO: Add comments to file
+//TODO: Format the file
 //Imports
-const {series, src, dest} = require("gulp");
+const {series, src, dest, watch, gulp} = require("gulp");
 const sass = require('gulp-sass');
 const browserSync = require('browser-sync').create();
 const sourcemaps = require('gulp-sourcemaps');
@@ -7,12 +9,14 @@ const autoprefixer = require('gulp-autoprefixer');
 const uglify = require('gulp-uglify');
 const rename = require('gulp-rename');
 const babel = require('gulp-babel');
-const concat = require('gulp-concat');
 const fs   = require('fs');
 const flatten = require('gulp-flatten')
 const htmlmin = require('gulp-htmlmin')
+const clean = require('gulp-clean');
+const debug = require('gulp-debug');
+// var cssPathDest = "bin/";
 
-//TODO: Remove flatten and rename
+
 function minifyJsFile(jsInput){
     src(jsInput)
         .pipe(sourcemaps.init())
@@ -23,7 +27,7 @@ function minifyJsFile(jsInput){
         .pipe(uglify())
         .pipe(sourcemaps.write("."))
         .pipe(flatten())
-        .pipe(dest("./bin"))
+        .pipe(dest("./bin/scripts"))
         .pipe(browserSync.reload({
             stream:true
         }))
@@ -34,11 +38,17 @@ function createBin(sb){
         'bin/img',
         'bin/scripts'
     ];
-    if(!fs.existsSync("./bin")){
-        fs.mkdirSync("./bin");
-        console.log("📁 🗑️ bin folder created")
+    folders.forEach(dir => {
+        if(!fs.existsSync("./bin")){
+            fs.mkdirSync("./bin");
+            console.log("📁 🗑️ bin folder created")
         }
-                   sb();
+        if(!fs.existsSync(dir)) {
+            fs.mkdirSync(dir);
+            console.log('📁  folder created:', dir);    
+        }   
+    });
+    sb();
 }
 
 function sassBuild(){
@@ -55,7 +65,7 @@ function sassBuild(){
 
 //TODO:Create a function that reads seperate files
 function minifyHTML(){
-    return src("src/pages/index.html")
+    return src("src/index.html")
             .pipe(sourcemaps.init())
             .pipe(htmlmin({ collapseWhitespace: true }))
             .pipe(sourcemaps.write())
@@ -73,17 +83,50 @@ function minifyJS(sb){
 
 function addImgs(){
     return src("src/img/*.png")
-            .pipe(dest("bin/"))
+            .pipe(dest("bin/img"))
 }
 
-function startBrowserSync(sb){
+function Clear(sb){
+    if(fs.existsSync("bin")){
+        return src("bin")
+                .pipe(clean())
+    }
+    console.log("✅ bin has already been cleaned ✅");
+    sb()    
+}
+
+function startBrowserSync(){
     browserSync.init({
         server: {
-            baseDir: 'bin'
+            baseDir: './bin',
+            index: "/index.html"
         },
     });
-    sb();
+        watch(["./src/scss/*.scss", "./src/scss/template/*.scss*", "./src/scripts/*.js*", "./src/*.html*", "./src/components/*.html"])
+        .on("change",
+            function(path, stats){
+                // cssPathDest = "./src";
+                if(path.includes(".html"))
+                    minifyHTML();
+                if(path.includes(".scss"))
+                    sassBuild();
+                if(path.includes(".js"))
+                    minifyJS();
+                  
+                browserSync.reload();
+            }
+        );
+
+        watch(["./src/img"])
+        .on("add",
+            function(path, stats){
+                addImgs();
+                browserSync.reload();
+            }
+        );
 }
 
 //NOTE: Always browser sync task is last
-exports.build = series(createBin ,sassBuild, minifyJS, minifyHTML,addImgs, startBrowserSync);
+exports.start = series(createBin ,sassBuild, minifyJS, minifyHTML, addImgs, startBrowserSync);
+exports.build = series(createBin ,sassBuild, minifyJS, minifyHTML, addImgs);
+exports.clear = series(Clear);

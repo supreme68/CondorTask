@@ -1,15 +1,11 @@
 header {
-	display: block;
-	width: 100vw;
-	min-height: 20px;
-	background-color: $light-blue;
-	position: fixed;
-	top: 0;
-	left: 0;
-	padding: 10px 15px;
-
-	a#logo {
-		color: $white;
-		font-weight: 1000;
-	}
-}
+	background-color: rgb(2, 41, 41);
+	// background-image: url("Layer 1 copy.png");
+	position: absolute;
+	left: 64px;
+	top: 10px;
+	width: 1152px;
+	height: 105px;
+	z-index: 50;
+  }
+  
