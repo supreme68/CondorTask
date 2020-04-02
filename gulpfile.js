@@ -14,10 +14,9 @@ const flatten = require('gulp-flatten')
 const htmlmin = require('gulp-htmlmin')
 const clean = require('gulp-clean');
 const debug = require('gulp-debug');
-// var cssPathDest = "bin/";
-
 
 function minifyJsFile(jsInput){
+    console.log(jsInput);
     src(jsInput)
         .pipe(sourcemaps.init())
         .pipe(babel({
@@ -31,6 +30,50 @@ function minifyJsFile(jsInput){
         .pipe(browserSync.reload({
             stream:true
         }))
+}
+
+function minifyJS(sb){
+    minifyJsFile("src/scripts/index.js");
+    minifyJsFile("src/scripts/game.js");
+    minifyJsFile("src/scripts/carousel.js");
+    sb()
+}
+
+function minifyHTML(){
+    return src("src/**/*.html")
+            .pipe(sourcemaps.init())
+            .pipe(htmlmin({ collapseWhitespace: true }))
+            .pipe(sourcemaps.write())
+            .pipe(dest('bin/'))
+            .pipe(browserSync.reload({
+                stream:true
+            }));
+}
+
+function sassBuild(){
+    return src('src/**/*.scss')
+            .pipe(sourcemaps.init())
+            .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
+            .pipe(autoprefixer())
+            .pipe(sourcemaps.write())
+            .pipe(dest("bin/"))
+            .pipe(browserSync.reload({
+                stream:true
+            }));
+}
+
+function addLibFiles(sb){
+    src("./src/lib/bootstrap-4.2.1/css/bootstrap.min.css")
+        .pipe(dest("bin/lib/bootstrap"))
+    src("./src/lib/phaser/phaser.min.js")
+        .pipe(dest("bin/lib/phaser/"))
+    // minifyJsFile("./src/lib/phaser/phaser.js")
+    sb()
+}
+
+function addImgs(){
+    return src("src/img/*.*")
+            .pipe(dest("bin/img"))
 }
 
 function createBin(sb){
@@ -51,39 +94,33 @@ function createBin(sb){
     sb();
 }
 
-function sassBuild(){
-    return src('src/scss/style.scss')
-            .pipe(sourcemaps.init())
-            .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
-            .pipe(autoprefixer())
-            .pipe(sourcemaps.write())
-            .pipe(dest("bin/"))
-            .pipe(browserSync.reload({
-                stream:true
-            }));
-}
+function startBrowserSync(){
+    browserSync.init({
+        server: {
+            baseDir: './bin',
+            index: "/index.html"
+        },
+    });
+    watch(["./src/**/*.scss",  "./src/**/*.js*", "./src/**/*.html*"])
+    .on("change",
+        function(path, stats){
+            if(path.includes(".html"))
+                minifyHTML();
+            if(path.includes(".scss"))
+                sassBuild();
+            if(path.includes(".js"))
+                minifyJS();
 
-//TODO:Create a function that reads seperate files
-function minifyHTML(){
-    return src("src/index.html")
-            .pipe(sourcemaps.init())
-            .pipe(htmlmin({ collapseWhitespace: true }))
-            .pipe(sourcemaps.write())
-            .pipe(dest('bin/'))
-            .pipe(browserSync.reload({
-                stream:true
-            }));
-}
-
-//TODO:Create a for loop for reading all .js(and html files) files instead of calling the function manualy
-function minifyJS(sb){
-    minifyJsFile("src/scripts/scripts.js")
-    sb()
-}
-
-function addImgs(){
-    return src("src/img/*.png")
-            .pipe(dest("bin/img"))
+            browserSync.reload();
+        }
+    );
+    watch(["./src/img"])
+    .on("add",
+        function(path, stats){
+            addImgs();
+            browserSync.reload();
+        }
+    );
 }
 
 function Clear(sb){
@@ -95,38 +132,6 @@ function Clear(sb){
     sb()    
 }
 
-function startBrowserSync(){
-    browserSync.init({
-        server: {
-            baseDir: './bin',
-            index: "/index.html"
-        },
-    });
-        watch(["./src/scss/*.scss", "./src/scss/template/*.scss*", "./src/scripts/*.js*", "./src/*.html*", "./src/components/*.html"])
-        .on("change",
-            function(path, stats){
-                // cssPathDest = "./src";
-                if(path.includes(".html"))
-                    minifyHTML();
-                if(path.includes(".scss"))
-                    sassBuild();
-                if(path.includes(".js"))
-                    minifyJS();
-                  
-                browserSync.reload();
-            }
-        );
-
-        watch(["./src/img"])
-        .on("add",
-            function(path, stats){
-                addImgs();
-                browserSync.reload();
-            }
-        );
-}
-
-//NOTE: Always browser sync task is last
-exports.start = series(createBin ,sassBuild, minifyJS, minifyHTML, addImgs, startBrowserSync);
-exports.build = series(createBin ,sassBuild, minifyJS, minifyHTML, addImgs);
+exports.run = series(createBin ,sassBuild, minifyJS, minifyHTML, addImgs, addLibFiles, startBrowserSync);
+exports.build = series(createBin ,sassBuild, minifyJS, minifyHTML, addImgs, addLibFiles);
 exports.clear = series(Clear);

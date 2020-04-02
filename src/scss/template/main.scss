@@ -1,3 +1,11 @@
+// $fontFam: "Source Code Pro", monospace;
+$backgroundColor: #0f0f23;
+%text-style{
+	font-family: "Source Code Pro", monospace;
+	color: #ffffff;
+	font-size: 12px;
+}
+
 .main-wrapper {
 	max-width: 1280px;
 	margin: 160px auto 0 auto;
@@ -7,13 +15,13 @@
 .text-wrapper{
 	max-width: 850px;
 	margin: 100px auto 0 70px;
-	background-color: rgb(30, 58, 58);
+	background-color: $backgroundColor;
 	font-family: "Tahoma";
 	color: rgb(255, 255, 255);
 }
 
 .text{
-	font-size: 12px;
+	@extend %text-style;
 	line-height: 1.5;
 	text-align: left;
 	position: raltive;
@@ -25,8 +33,9 @@
 }
 
 .rightCol{
+	@extend %text-style;
 	margin-top: 100px;
 	width: 326px;
 	height: 637px;
-	background-color: rgb(5, 82, 82);
+	background-color: $backgroundColor;
 }
