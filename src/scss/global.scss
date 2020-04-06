@@ -1,12 +1,7 @@
-// Load Fonts
-@import url('https://fonts.googleapis.com/css?family=Roboto');
-
-body {
-	font-family: 'Roboto', sans-serif;
+%text-style{
+	font-family: "Tahoma";
+	color: #ffffff;
+	font-size: 12px;
 }
 
-// Global Variables
-$black: #3d3d3d;
-$white: #ededed;
-$light-blue: #6fbfe8;
-$accent-orange: #d6751b;
+$barColor: rgb(2, 41, 41);

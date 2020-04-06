@@ -1,11 +1,48 @@
+@import "../global.scss";
+
+#logo{
+	position: relative;
+	top:12px;
+}
+
+#header-bar{
+	font-size: 18px;
+	background-color: $barColor;
+	width:96%;
+	height:100px;
+	left: 43px;
+	position: relative;
+	margin-left: 25px;
+}
+
 header {
-	background-color: #0f0f23;
-	// background-image: url("Layer 1 copy.png");
-	position: absolute;
-	left: 64px;
-	top: 10px;
-	width: 1152px;
-	height: 105px;
-	z-index: 50;
+	display: flex;
+	width: 20%;
+	bottom:10px;
+	height: none !important;
+	background-color: rgb(6, 102, 102);
+	margin-bottom: 20px;
+	top: 34px;
+	position: relative;
+}
+  
+  header > * {
+	@extend %text-style;
+	width: 100%;
+	//  height:0%;
+	cursor: pointer;
+	padding: 8px;
+	font-size: 18px;
+	text-align: center;
+	transition: color 150ms ease-in-out;
+  }
+  
+  header div:hover {
+	color: #fff;
+  }
+  
+  #gallery-content,
+  #about-content {
+	display: none;
   }
   

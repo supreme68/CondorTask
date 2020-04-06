@@ -1,0 +1,10 @@
+.rightCol{
+	@extend %text-style;
+    margin-top: 16px;
+	width: 326px;
+    height: 645px;
+	background-color: $barColor;
+	outline-style: solid;
+	outline-color: rgb(5, 82, 82);
+	outline-width: 7px;  
+}

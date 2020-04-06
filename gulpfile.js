@@ -36,7 +36,9 @@ function minifyJS(sb){
     minifyJsFile("src/scripts/index.js");
     minifyJsFile("src/scripts/game.js");
     minifyJsFile("src/scripts/carousel.js");
-    sb()
+    if(typeof(sb) == "function"){
+        sb()
+    }
 }
 
 function minifyHTML(){
@@ -51,7 +53,7 @@ function minifyHTML(){
 }
 
 function sassBuild(){
-    return src('src/**/*.scss')
+    return src('src/scss/style.scss')
             .pipe(sourcemaps.init())
             .pipe(sass({ outputStyle: 'compressed' }).on('error', sass.logError))
             .pipe(autoprefixer())

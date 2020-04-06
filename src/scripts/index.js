@@ -1,17 +1,14 @@
 'use strict';
 
-agCookie.create('example-cookie', true, 1);
-
-var readValue = agCookie.read('example-cookie');
-console.log(readValue);
-
-agCookie.erase('example-cookie');
-'use strict';
-
-console.log('I have entered this file.');
-console.log('This is crystal clear evidence that this works.');
-
-var calculation = 200 + 223;
-
-console.log('Sanity Check: 200 + 223 = ' + calculation);
-console.log('bye.');
+function loadHTMLFiles(pathToFiles, htmlIDs) {
+    pathToFiles.forEach((path, i)=>{
+    var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+          document.getElementById(htmlIDs[i]).innerHTML = this.responseText.replace(/""/g, "'");        
+        }
+      };
+      xhttp.open("GET", path, true);
+      xhttp.send();
+    })
+  }

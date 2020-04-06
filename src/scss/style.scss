@@ -2,6 +2,7 @@
 @import "global";
 
 /* Template segments */
-@import "template/header";
-@import "template/footer";
-@import "template/main";
+@import "template/header.scss";
+@import "template/footer.scss";
+@import "template/main.scss";
+@import "template/rightCol.scss";
