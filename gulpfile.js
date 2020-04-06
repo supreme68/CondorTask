@@ -69,11 +69,10 @@ function addLibFiles(sb){
         .pipe(dest("bin/lib/bootstrap"))
     src("./src/lib/phaser/phaser.min.js")
         .pipe(dest("bin/lib/phaser/"))
-    src("./src/lib/bootstrap/js/bootstrap.min.js")
+    src("./src/lib/bootstrap/js/bootstrap.bundle.min.js")
         .pipe(dest("bin/lib/bootstrap"))
     src("./src/lib/jquery/jquery-3.4.1.min.js")
         .pipe(dest("bin/lib/jquery"))
-    // minifyJsFile("./src/lib/phaser/phaser.js")
     sb()
 }
 
