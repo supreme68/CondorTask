@@ -65,10 +65,14 @@ function sassBuild(){
 }
 
 function addLibFiles(sb){
-    src("./src/lib/bootstrap-4.2.1/css/bootstrap.min.css")
+    src("./src/lib/bootstrap/css/bootstrap.min.css")
         .pipe(dest("bin/lib/bootstrap"))
     src("./src/lib/phaser/phaser.min.js")
         .pipe(dest("bin/lib/phaser/"))
+    src("./src/lib/bootstrap/js/bootstrap.min.js")
+        .pipe(dest("bin/lib/bootstrap"))
+    src("./src/lib/jquery/jquery-3.4.1.min.js")
+        .pipe(dest("bin/lib/jquery"))
     // minifyJsFile("./src/lib/phaser/phaser.js")
     sb()
 }
